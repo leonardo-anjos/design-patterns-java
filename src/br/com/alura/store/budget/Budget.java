@@ -1,16 +1,20 @@
 package br.com.alura.store.budget;
 
+import br.com.alura.store.budget.status.BudgetStatus;
+import br.com.alura.store.budget.status.Review;
+
 import java.math.BigDecimal;
 
 public class Budget {
 
     private BigDecimal value;
     private int qtdItem;
-    private String status;
+    private BudgetStatus status;
 
     public Budget(BigDecimal value, int qtdItem) {
         this.value = value;
         this.qtdItem = qtdItem;
+        this.status = new Review();
     }
 
     public BigDecimal getValue() {
@@ -21,19 +25,28 @@ public class Budget {
         return qtdItem;
     }
 
-    public String getStatus() {
+    public BudgetStatus getStatus() {
         return status;
     }
 
+    public void setStatus(BudgetStatus status) {
+        this.status = status;
+    }
+
     public void applyExtraDiscount() {
-        BigDecimal extraDiscountValue = BigDecimal.ZERO;
-
-        if (status.equals("REVIEW")) {
-            extraDiscountValue = new BigDecimal("0,05");
-        } else if (status.equals("APPROVED")) {
-            extraDiscountValue = new BigDecimal("0,02");
-        }
-
+        BigDecimal extraDiscountValue = this.status.calculateValueExtraDiscount(this);
         this.value = this.value.subtract(extraDiscountValue);
+    }
+
+    public void toApprove() {
+        this.status.toApprove(this);
+    }
+
+    public void toDisapprove() {
+        this.status.toDisapproved(this);
+    }
+
+    public void toFinish() {
+        this.status.toFinish(this);
     }
 }
