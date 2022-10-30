@@ -6,6 +6,7 @@ public class Budget {
 
     private BigDecimal value;
     private int qtdItem;
+    private String status;
 
     public Budget(BigDecimal value, int qtdItem) {
         this.value = value;
@@ -18,5 +19,21 @@ public class Budget {
 
     public int getQtdItem() {
         return qtdItem;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void applyExtraDiscount() {
+        BigDecimal extraDiscountValue = BigDecimal.ZERO;
+
+        if (status.equals("REVIEW")) {
+            extraDiscountValue = new BigDecimal("0,05");
+        } else if (status.equals("APPROVED")) {
+            extraDiscountValue = new BigDecimal("0,02");
+        }
+
+        this.value = this.value.subtract(extraDiscountValue);
     }
 }
